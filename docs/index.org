@@ -1,0 +1,84 @@
+#+TITLE: ExtractTF
+#+SUBTITLE: Extract Titles and Footnotes from DPS - Part 1
+#+AUTHOR: Kenneth Yan
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./org.css"/>
+
+#+OPTIONS: toc:nil num:3 H:4 ^:nil pri:t
+
+#+TOC: headlines 2
+
+* Introduction
+ExtractTF is a tool to extract the titles and footnotes from the Word document of Data Presentation Specifications - Part 1(.docx), then export them to .XLSX or .XML file which can be transferred to SAS dataset easily.
+
+#+CAPTION: The window of ExtractTF
+[[file:./images/001.png]]
+
+** Key Elements to extract from DPS
+
+- Study ID
+The study ID is extracted from the first page of DPS - Part 1. See the picture below. 
+#+CAPTION: Study ID
+[[./images/002.png]]
+
+- Title
+- Analysis Set
+#+CAPTION: Title and Analysis Set
+[[./images/003.png]]
+
+
+- Footnote
+The footnotes *is* extracted from the *Display Specifications* table, and *is not* extracted from the shell table. See the picture below.
+#+CAPTION: Footnotes
+[[./images/004.png]]
+
+* Install
+Copy the folder =S:\2_Tools\ExtractTF= to your desktop, such as =C:\ExtractTF=.
+
+* Step by step guide
+
+** Run ExtractTF
+Double click the file *ExtractTF.jar* to run. 
+
+** Define "DPS File Name"
+Click the "Open" button to select the DPS file from which you want to extract the titles and footnotes.
+
+** Define "Export To"
+ Click the "Open" button to select the folder that Titles.xlsx/Titles.xml will save to. 
+
+** Define "Format"
+ By default, both XLSX and XML are selected. You can make the change per your need.
+
+** Define "Escape Char"
+ By default, the escase char is '~'. You can change it to other char if needed.
+ This escape char is often used by superscript char, such as /*~{super a}* p-value is from a log-rank test stratified by ECGO PS score (0 or 1) and age group (<65 or >=65)./
+
+** Select "Title and Footnote"
+Be default, both titles and footnotes are checked. If you do not need the footnotes information, you can uncheck its checkbox.
+
+** Click "Run" button.
+You can see the log info while it is running. 
+
+* Transfer to SAS dataset
+** Import Titles.xlsx file
+Use the global reporting macro %RMDPSTITLE to import Titles.xlsx file.
+
+** Import Titles.xml file
+Use the SAS code below to import Titles.xml. You can find the code in the file /ExtractTF\ImportXML.sas/.
+
+#+BEGIN_SRC SAS
+libname temp xml "c:\D\temp\Titles.xml"; /* Change the path of Titles.xml */
+
+data titles;
+    set temp.titles;
+run;
+
+#+END_SRC
+
+* Support Information
+#+BEGIN_info
+Please write Email to: \\
+
+[[mailto:DL-RNDUS-GCDO-IDAR-SP-AI@ITS.JNJ.com][DL-GCDO-IDAR-SP-AI]]
+
+#+END_info
+
